@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@PreAuthorize("hasRole('ADMIN')")
 public class TestController {
 
     private final ResolutionRepository resolutionRepository;
@@ -39,8 +38,15 @@ public class TestController {
         return "Public Hello";
     }
 
-    @GetMapping("/hello")
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     public String helloWorld(){
         return "Hello Admin world";
+    }
+
+    @GetMapping("/manager")
+    @PreAuthorize("hasRole('MANAGER')")
+    public String helloManager(){
+        return "Hello Manager world";
     }
 }
