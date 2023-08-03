@@ -9,16 +9,35 @@ import org.springframework.stereotype.Component;
 public class DbInsert implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final ResolutionRepository resolutionRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DbInsert(UserRepository userRepository, ResolutionRepository resolutionRepository, PasswordEncoder passwordEncoder) {
+    public DbInsert(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.resolutionRepository = resolutionRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        var userAdmin = User.builder()
+                .email("something@mail.com")
+                .firstName("Martin")
+                .lastName("Kotac")
+                .role(Role.ADMIN)
+                .password(passwordEncoder.encode("dummy"))
+                .build();
+        this.userRepository.save(userAdmin);
+
+        System.out.println(userAdmin.getAuthorities());
+
+        var userManager = User.builder()
+                .email("manager@mail.com")
+                .firstName("Nikola")
+                .lastName("Bojkos")
+                .role(Role.MANAGER)
+                .password(passwordEncoder.encode("1234"))
+                .build();
+        this.userRepository.save(userManager);
+
+        System.out.println(userManager.getAuthorities());
     }
 }

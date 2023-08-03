@@ -5,6 +5,7 @@ import com.example.securityPlayground.model.Resolution;
 import com.example.securityPlayground.model.ResolutionRepository;
 import com.example.securityPlayground.model.User;
 import com.example.securityPlayground.model.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@PreAuthorize("hasRole('ADMIN')")
 public class TestController {
 
     private final ResolutionRepository resolutionRepository;
@@ -32,8 +34,13 @@ public class TestController {
         return this.resolutionRepository.findAll();
     }
 
+    @GetMapping("/public")
+    public String publicHello() {
+        return "Public Hello";
+    }
+
     @GetMapping("/hello")
     public String helloWorld(){
-        return "Hello public world";
+        return "Hello Admin world";
     }
 }
